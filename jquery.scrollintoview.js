@@ -77,12 +77,12 @@
 			///        duration (default: "fast") - jQuery animation speed (can be a duration string or number of milliseconds)
 			///        direction (default: "both") - select possible scrollings ("vertical" or "y", "horizontal" or "x", "both")
 			///        complete (default: none) - a function to call when scrolling completes (called in context of the DOM element being scrolled)
+			///        alwaysTop (default: false) - always scroll in such a way that the element is placed at the top of the container, even in a downward scroll.
 			/// </param>
 			/// <return type="jQuery">Returns the same jQuery set that this function was run on.</return>
 
 			options = $.extend({}, settings, options);
 			options.direction = converter[typeof (options.direction) === "string" && options.direction.toLowerCase()] || converter.both;
-
 			var dirStr = "";
 			if (options.direction.x === true) dirStr = "horizontal";
 			if (options.direction.y === true) dirStr = dirStr ? "both" : "vertical";
@@ -118,7 +118,11 @@
 					}
 					else if (rel.top > 0 && rel.bottom < 0)
 					{
-						animOptions.scrollTop = dim.s.scroll.top + Math.min(rel.top, -rel.bottom);
+						if (options.alwaysTop === true) {
+							animOptions.scrollTop = dim.s.scroll.top + rel.top;
+						} else {
+							animOptions.scrollTop = dim.s.scroll.top + Math.min(rel.top, -rel.bottom);
+						}
 					}
 				}
 
